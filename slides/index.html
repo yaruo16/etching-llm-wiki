@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>半導體蝕刻入門｜教學簡報</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=LXGW+WenKai+TC:wght@400;700&family=Caveat:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#fbf6e9;
+  --grid:#e6dcc3;
+  --ink:#2b2a33;
+  --pen:#1f4e8c;
+  --red:#c8413b;
+  --hl-y:#ffe86b;
+  --hl-g:#b6f0a8;
+  --hl-p:#ffc4dd;
+  --tape:rgba(255,214,120,.65);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:#d9cfb8}
+body{font-family:"LXGW WenKai TC","Klee One","Kaiti TC","BiauKai",serif;color:var(--ink);overflow:hidden}
+.deck{position:relative;width:100vw;height:100vh}
+.slide{
+  position:absolute;inset:2.5vh 2.5vw;
+  background-color:var(--paper);
+  background-image:
+    linear-gradient(var(--grid) 1px,transparent 1px),
+    linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:28px 28px;
+  border-radius:6px;
+  box-shadow:0 10px 30px rgba(60,40,10,.25);
+  padding:5vh 6vw 7vh 8vw;
+  display:none;flex-direction:column;
+  overflow:hidden;
+}
+.slide::before{
+  content:"";position:absolute;top:0;bottom:0;left:5vw;width:2px;background:rgba(200,65,59,.45);
+}
+.slide.active{display:flex;animation:in .35s ease}
+@keyframes in{from{opacity:0;transform:translateY(8px) rotate(-.3deg)}to{opacity:1;transform:none}}
+h1{font-size:clamp(34px,5.4vw,72px);line-height:1.2;font-weight:700}
+h2{
+  font-size:clamp(26px,3.4vw,46px);font-weight:700;margin-bottom:3vh;align-self:flex-start;
+  background:linear-gradient(transparent 58%,var(--hl-y) 58%,var(--hl-y) 92%,transparent 92%);
+  padding:0 .2em;
+}
+.stage{font-family:"Caveat",cursive;color:var(--red);font-size:clamp(20px,2vw,28px);transform:rotate(-2deg);margin-bottom:.6vh;align-self:flex-start}
+.body{display:flex;gap:3vw;flex:1;align-items:flex-start}
+.col{flex:1;min-width:0}
+ul.pts{list-style:none;display:flex;flex-direction:column;gap:2.2vh}
+ul.pts li{font-size:clamp(18px,2.3vw,32px);line-height:1.5;padding-left:1.6em;position:relative}
+ul.pts li::before{content:"✎";position:absolute;left:0;color:var(--pen)}
+mark{background:linear-gradient(100deg,transparent 2%,var(--hl-y) 4%,var(--hl-y) 96%,transparent 98%);color:inherit;padding:0 .15em;border-radius:3px}
+mark.g{background:linear-gradient(100deg,transparent 2%,var(--hl-g) 4%,var(--hl-g) 96%,transparent 98%)}
+mark.p{background:linear-gradient(100deg,transparent 2%,var(--hl-p) 4%,var(--hl-p) 96%,transparent 98%)}
+.wtag{
+  display:inline-block;margin-left:.5em;font-size:.55em;vertical-align:middle;
+  font-family:"Caveat",cursive;color:var(--pen);text-decoration:none;
+  border:1.5px solid var(--pen);border-radius:255px 15px 225px 15px/15px 225px 15px 255px;
+  padding:0 .45em;background:rgba(255,255,255,.6);white-space:nowrap
+}
+.wtag:hover{background:var(--hl-g)}
+.card{
+  position:relative;background:#fff;padding:2.2vh 1.6vw;
+  border:2px solid var(--ink);
+  border-radius:255px 15px 225px 15px/15px 225px 15px 255px;
+  box-shadow:3px 4px 0 rgba(43,42,51,.15);
+}
+.card::after{
+  content:"";position:absolute;top:-12px;left:40%;width:80px;height:22px;background:var(--tape);transform:rotate(-4deg)
+}
+table.sk{border-collapse:collapse;width:100%;font-size:clamp(16px,2vw,28px);background:rgba(255,255,255,.75)}
+table.sk th,table.sk td{border:2px solid var(--ink);padding:1.1vh .9vw;text-align:left;vertical-align:top}
+table.sk th{background:var(--hl-p);font-weight:700}
+table.sk tr td:first-child{font-weight:700;white-space:nowrap}
+svg.draw{width:100%;height:auto;max-height:46vh}
+svg.draw text{font-family:"LXGW WenKai TC",serif;font-size:15px;fill:var(--ink)}
+svg.draw .hand{fill:none;stroke:var(--ink);stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.cover{justify-content:center;align-items:flex-start;gap:2.5vh}
+.cover .sub{font-size:clamp(22px,2.6vw,36px);color:var(--pen)}
+.cover .who{margin-top:3vh;font-size:clamp(18px,1.9vw,26px);line-height:1.7}
+.cover .note{font-family:"Caveat",cursive;color:var(--red);font-size:clamp(20px,2vw,28px);transform:rotate(-1.5deg)}
+.road{display:flex;gap:1.6vw;flex-wrap:wrap;align-items:center;margin-top:4vh}
+.road .step{font-size:clamp(20px,2.3vw,32px);padding:2vh 1.5vw}
+.road .arr{font-size:clamp(24px,3vw,40px);color:var(--red)}
+.refs li{font-size:clamp(15px,1.5vw,21px);line-height:1.5}
+.refs a{color:var(--pen);word-break:break-all}
+.flow{display:flex;align-items:center;gap:1.2vw;margin-top:3vh;flex-wrap:wrap}
+.flow .card{font-size:clamp(17px,1.8vw,25px)}
+.flow .arr{font-size:clamp(22px,2.6vw,36px);color:var(--red)}
+.hint{font-family:"Caveat",cursive;color:#8a7f66;font-size:clamp(16px,1.5vw,22px);margin-top:auto;padding-top:2vh}
+.nav{position:fixed;bottom:3.5vh;right:4vw;display:flex;gap:10px;align-items:center;z-index:5;font-family:"Caveat",cursive;font-size:24px}
+.nav button{font-family:inherit;font-size:22px;background:#fff;border:2px solid var(--ink);border-radius:255px 15px 225px 15px/15px 225px 15px 255px;padding:2px 14px;cursor:pointer}
+.nav button:hover{background:var(--hl-y)}
+.bar{position:fixed;left:2.5vw;bottom:2.5vh;height:4px;background:var(--red);border-radius:2px;transition:width .3s;z-index:5}
+</style>
+</head>
+<body>
+<div class="deck">
+
+<section class="slide cover" data-kind="meta">
+  <div class="note">成大 生成式 AI 作業｜LLM Wiki 教學簡報</div>
+  <h1>半導體<mark>蝕刻</mark>入門</h1>
+  <div class="sub">把電路圖案「刻」進晶圓</div>
+  <div class="who">成大 系統系碩二　李亞若（P16144108）<br>內容只根據本專題的 LLM Wiki 整理</div>
+  <div class="hint">← → 方向鍵換頁</div>
+</section>
+
+<section class="slide" data-kind="meta">
+  <h2>今天的路線</h2>
+  <div class="road">
+    <div class="card step">① 是什麼</div><div class="arr">→</div>
+    <div class="card step">② 為什麼</div><div class="arr">→</div>
+    <div class="card step">③ 怎麼運作</div><div class="arr">→</div>
+    <div class="card step">④ 例子</div><div class="arr">→</div>
+    <div class="card step">⑤ 重點整理</div>
+  </div>
+  <div class="hint">每個重點旁邊的小標籤＝對應的 Wiki 頁，點了可以直接去看</div>
+</section>
+
+<section class="slide">
+  <div class="stage">① 是什麼</div>
+  <h2>蝕刻是什麼？</h2>
+  <ul class="pts">
+    <li data-wiki="01">把晶圓上<mark>不要的材料</mark>移除，只留下想要的電路圖案</li>
+    <li data-wiki="01">接在<mark class="g">微影</mark>之後：微影先把圖案「畫」上去，蝕刻再「刻」進底下的材料</li>
+    <li data-wiki="01">圖案由<mark class="p">遮罩</mark>決定：被遮罩（例如光阻）蓋住的留下，露出來的被移除</li>
+  </ul>
+  <div class="flow">
+    <div class="card">微影：畫圖案</div><div class="arr">→</div>
+    <div class="card">蝕刻：刻下去</div><div class="arr">→</div>
+    <div class="card">很多層重複</div>
+  </div>
+</section>
+
+<section class="slide">
+  <div class="stage">① 是什麼</div>
+  <h2>用版畫來想像</h2>
+  <table class="sk">
+    <tr><th>版畫蝕刻</th><th>半導體蝕刻</th></tr>
+    <tr data-wiki="01"><td>金屬板上的抗腐蝕塗層</td><td>微影留下的光阻</td></tr>
+    <tr data-wiki="01"><td>腐蝕液（例如硝酸）</td><td>蝕刻劑（液體或氣體）</td></tr>
+    <tr data-wiki="01"><td>沒被塗層保護的地方被吃掉</td><td>沒被光阻保護的材料被移除</td></tr>
+  </table>
+</section>
+
+<section class="slide">
+  <div class="stage">② 為什麼</div>
+  <h2>為什麼要學蝕刻？</h2>
+  <ul class="pts">
+    <li data-wiki="01">它是重複最多次的步驟之一，現代製程會做上<mark>數十次</mark></li>
+    <li data-wiki="01">電晶體、導線、通孔這些結構都要靠它做出來</li>
+    <li data-wiki="01">分成兩大類：<mark class="g">濕式</mark>（用液體）和<mark class="p">乾式</mark>（用電漿或氣體）</li>
+  </ul>
+</section>
+
+<section class="slide">
+  <div class="stage">② 為什麼</div>
+  <h2>關鍵問題：會不會往旁邊吃？</h2>
+  <div class="body">
+    <div class="col">
+      <ul class="pts">
+        <li data-wiki="04"><mark>等向性</mark>：各方向一樣快，會從遮罩底下往旁邊吃進去（底切）</li>
+        <li data-wiki="04"><mark class="g">非等向性</mark>：往下快、往旁邊慢，側壁接近垂直</li>
+        <li data-wiki="04">線寬越來越小、結構又窄又深（深寬比高），一定要用非等向性</li>
+      </ul>
+    </div>
+    <div class="col card">
+      <svg class="draw" viewBox="0 0 420 300">
+        <text x="20" y="22">等向性</text>
+        <path class="hand" d="M10 70 L60 70 M130 70 L190 70"/>
+        <rect x="10" y="50" width="65" height="18" fill="#ffc4dd" stroke="#2b2a33" stroke-width="2"/>
+        <rect x="115" y="50" width="75" height="18" fill="#ffc4dd" stroke="#2b2a33" stroke-width="2"/>
+        <path class="hand" d="M10 70 L50 70 Q52 125 95 128 Q138 125 140 70 L190 70"/>
+        <path d="M50 70 Q52 125 95 128 Q138 125 140 70 Z" fill="#ffe86b" opacity=".6"/>
+        <text x="40" y="160">遮罩底下被吃進去</text>
+        <text x="230" y="22">非等向性</text>
+        <rect x="220" y="50" width="70" height="18" fill="#ffc4dd" stroke="#2b2a33" stroke-width="2"/>
+        <rect x="330" y="50" width="70" height="18" fill="#ffc4dd" stroke="#2b2a33" stroke-width="2"/>
+        <path class="hand" d="M220 70 L290 70 L291 150 L329 151 L330 70 L400 70"/>
+        <path d="M290 70 L291 150 L329 151 L330 70 Z" fill="#b6f0a8" opacity=".7"/>
+        <text x="250" y="180">側壁接近垂直</text>
+        <text x="10" y="230" style="fill:#c8413b">粉紅＝遮罩　黃／綠＝被蝕刻掉的地方</text>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<section class="slide">
+  <div class="stage">③ 怎麼運作</div>
+  <h2>濕式蝕刻：泡藥水</h2>
+  <ul class="pts">
+    <li data-wiki="02">通常把晶圓整個泡進<mark>蝕刻液</mark>的槽裡，液體和露出來的材料反應</li>
+    <li data-wiki="02">優點：<mark class="g">選擇比</mark>高＝通常只有目標那一層會反應，其他層不太受影響</li>
+    <li data-wiki="02">缺點：大多是<mark class="p">等向性</mark>，特徵小於幾微米就很難控制</li>
+    <li data-wiki="02">現在先進製程主要拿它來<mark>清洗</mark></li>
+  </ul>
+</section>
+
+<section class="slide">
+  <div class="stage">③ 怎麼運作</div>
+  <h2>乾式蝕刻：用電漿</h2>
+  <div class="body">
+    <div class="col">
+      <ul class="pts">
+        <li data-wiki="03">不用液體，改用<mark>電漿</mark>或氣體來移除材料</li>
+        <li data-wiki="03">電漿裡有：自由電子、正離子（<mark class="p">離子</mark>＝帶電的原子或分子）、<mark class="g">自由基</mark>（反應性中性粒子）</li>
+        <li data-wiki="03">強電場加速電子 → 撞上氣體分子 → 產生離子和自由基</li>
+        <li data-wiki="03">全程在<mark class="p">真空</mark>裡進行</li>
+      </ul>
+    </div>
+    <div class="col card">
+      <svg class="draw" viewBox="0 0 400 260">
+        <text x="20" y="30">電漿裡的成員</text>
+        <circle cx="70" cy="90" r="16" fill="#fff" stroke="#2b2a33" stroke-width="2"/><text x="56" y="95">電子</text>
+        <text x="40" y="135">自由電子</text>
+        <circle cx="200" cy="90" r="22" fill="#ffc4dd" stroke="#2b2a33" stroke-width="2"/><text x="191" y="96">+</text>
+        <text x="176" y="135">正離子</text>
+        <circle cx="330" cy="90" r="19" fill="#b6f0a8" stroke="#2b2a33" stroke-width="2"/><text x="324" y="96">F</text>
+        <text x="306" y="135">自由基</text>
+        <path class="hand" d="M30 200 Q200 175 370 200"/>
+        <text x="120" y="235">全程在真空裡進行</text>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<section class="slide">
+  <div class="stage">③ 怎麼運作</div>
+  <h2>移除材料的兩種方式</h2>
+  <table class="sk">
+    <tr><th></th><th>物理方式</th><th>化學方式</th></tr>
+    <tr data-wiki="03"><td>主角</td><td>離子（例如氬離子 Ar⁺）</td><td>自由基（例如氟原子 F）</td></tr>
+    <tr data-wiki="03"><td>怎麼移除</td><td>像撞球一樣把表面原子撞出來（動量轉移）</td><td>和材料反應變成氣體，被抽走</td></tr>
+    <tr data-wiki="03"><td>方向性</td><td>有方向性</td><td>等向性</td></tr>
+    <tr data-wiki="03"><td>選擇比</td><td>差</td><td>好</td></tr>
+  </table>
+  <div class="hint">各有缺點 → 下一頁：把兩個合在一起</div>
+</section>
+
+<section class="slide">
+  <div class="stage">③ 怎麼運作</div>
+  <h2>RIE：自由基＋離子的合作</h2>
+  <ul class="pts">
+    <li data-wiki="05"><mark>RIE（反應式離子蝕刻）</mark>同時用化學反應和物理撞擊</li>
+    <li data-wiki="05"><mark class="g">自由基</mark>負責化學反應，提供高蝕刻速率</li>
+    <li data-wiki="05"><mark class="p">離子</mark>往下打，打斷表面原子的化學鍵，讓自由基反應更快</li>
+    <li data-wiki="05">兩者一起用，速率比單用一種高很多，叫<mark>協同效應</mark></li>
+  </ul>
+</section>
+
+<section class="slide">
+  <div class="stage">③ 怎麼運作</div>
+  <h2>為什麼能挖得又直又深？</h2>
+  <div class="body">
+    <div class="col">
+      <ul class="pts">
+        <li data-wiki="05">電極上的負電位（<mark>負偏壓</mark>）把帶正電的離子垂直往下拉</li>
+        <li data-wiki="05">離子主要打到溝槽<mark class="g">底部</mark>，清掉底部的<mark>副產物</mark>（反應產生的物質）</li>
+        <li data-wiki="05">側壁的副產物留著<mark class="p">保護側壁</mark>（鈍化），所以側壁接近垂直</li>
+      </ul>
+    </div>
+    <div class="col card">
+      <svg class="draw" viewBox="0 0 400 300">
+        <rect x="40" y="60" width="110" height="20" fill="#ffc4dd" stroke="#2b2a33" stroke-width="2"/>
+        <rect x="250" y="60" width="110" height="20" fill="#ffc4dd" stroke="#2b2a33" stroke-width="2"/>
+        <path class="hand" d="M40 80 L150 80 L151 240 L249 241 L250 80 L360 80"/>
+        <path d="M151 82 L151 238" stroke="#1f4e8c" stroke-width="7" opacity=".45"/>
+        <path d="M249 82 L249 238" stroke="#1f4e8c" stroke-width="7" opacity=".45"/>
+        <path class="hand" d="M180 15 L180 210 M172 200 L180 212 L188 200" style="stroke:#c8413b"/>
+        <path class="hand" d="M220 15 L220 210 M212 200 L220 212 L228 200" style="stroke:#c8413b"/>
+        <text x="236" y="30" style="fill:#c8413b">離子往下打</text>
+        <text x="20" y="190" style="fill:#1f4e8c">側壁副產物</text>
+        <text x="165" y="275">底部持續被蝕刻</text>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<section class="slide">
+  <div class="stage">④ 例子</div>
+  <h2>實際會用到的東西</h2>
+  <table class="sk">
+    <tr><th>用什麼</th><th>做什麼</th></tr>
+    <tr data-wiki="02"><td>氫氟酸（HF）</td><td>濕式：去除二氧化矽</td></tr>
+    <tr data-wiki="02"><td>氫氧化鉀（KOH）</td><td>濕式：蝕刻矽時有方向性，可做出 V 型槽</td></tr>
+    <tr data-wiki="05"><td>SF6 氣體</td><td>RIE：蝕刻矽</td></tr>
+    <tr data-wiki="05"><td>CF4/O2 氣體</td><td>RIE：蝕刻氧化物</td></tr>
+    <tr data-wiki="05"><td>Bosch 製程</td><td>蝕刻、鈍化交替做，挖出很深的矽溝槽，用在矽穿孔（TSV）</td></tr>
+  </table>
+</section>
+
+<section class="slide">
+  <div class="stage">⑤ 重點整理</div>
+  <h2>怎麼判斷蝕刻做得好？</h2>
+  <ul class="pts">
+    <li data-wiki="06"><mark>選擇比</mark>＝目標材料蝕刻速率 ÷ 遮罩蝕刻速率</li>
+    <li data-wiki="06"><mark class="g">非等向性</mark>：往下、而不是往旁邊蝕刻的程度</li>
+    <li data-wiki="06"><mark class="p">均勻度</mark>：整片晶圓的蝕刻速率要一致，不然深度不一</li>
+    <li data-wiki="06">何時停：<mark>終點偵測</mark>（感測剛好蝕刻完），再多蝕刻一點（過蝕刻）</li>
+  </ul>
+</section>
+
+<section class="slide">
+  <div class="stage">⑤ 重點整理</div>
+  <h2>一頁帶走</h2>
+  <ul class="pts">
+    <li data-wiki="01">蝕刻＝照著遮罩，把不要的材料移除</li>
+    <li data-wiki="02">濕式：選擇比高，但大多是等向性，現在多用來清洗</li>
+    <li data-wiki="03">乾式（電漿）：能做出有方向性的結構，是現在的主流</li>
+    <li data-wiki="05">RIE：自由基負責反應，離子決定方向</li>
+    <li data-wiki="06">好的蝕刻看三件事：選擇比、非等向性、均勻度</li>
+  </ul>
+</section>
+
+<section class="slide" data-kind="meta">
+  <h2>參考資料</h2>
+  <ol class="refs" style="padding-left:1.4em;display:flex;flex-direction:column;gap:1.4vh">
+    <li>S1　Samsung Newsroom (2015). Eight Major Steps to Semiconductor Fabrication, Part 5: Etching a Circuit Pattern.<br><a href="https://news.samsung.com/global/eight-major-steps-to-semiconductor-fabrication-part-5-etching-a-circuit-pattern">news.samsung.com/global/eight-major-steps-to-semiconductor-fabrication-part-5-etching-a-circuit-pattern</a></li>
+    <li>S2　MKS Instruments. Semiconductor Etching. <a href="https://www.mks.com/n/etch-overview">mks.com/n/etch-overview</a></li>
+    <li>S3　MKS Instruments. Reactive Ion Etching. <a href="https://www.mks.com/n/reactive-ion-etching">mks.com/n/reactive-ion-etching</a></li>
+    <li>S4　EPFL CMi. Etch definitions. <a href="https://www.epfl.ch/research/facilities/cmi/process/etching/etch-definitions">epfl.ch/research/facilities/cmi/process/etching/etch-definitions</a></li>
+    <li>S5　IEEE TechNav. Etching. <a href="https://technav.ieee.org/topic/etching/">technav.ieee.org/topic/etching</a></li>
+    <li>本簡報的知識來源：<a href="../wiki/">半導體蝕刻 LLM Wiki</a>（讀取日期 2026-11-21）</li>
+  </ol>
+</section>
+
+</div>
+<div class="bar" id="bar"></div>
+<div class="nav"><button id="prev">←</button><span id="count"></span><button id="next">→</button></div>
+<script>
+const WIKI={"01":"01-what-is-etching","02":"02-wet-etching","03":"03-dry-etching","04":"04-isotropic-anisotropic","05":"05-rie","06":"06-key-concepts"};
+document.querySelectorAll("[data-wiki]").forEach(el=>{
+  const id=el.dataset.wiki;
+  const a=document.createElement("a");
+  a.className="wtag";
+  a.href="../wiki/"+WIKI[id]+".html";
+  a.target="_blank";
+  a.textContent="Wiki "+id;
+  const host=el.tagName==="TR"?el.lastElementChild:el;
+  host.appendChild(a);
+});
+const slides=[...document.querySelectorAll(".slide")];
+let i=0;
+function show(n){
+  i=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,k)=>s.classList.toggle("active",k===i));
+  document.getElementById("count").textContent=(i+1)+" / "+slides.length;
+  document.getElementById("bar").style.width=((i+1)/slides.length*95)+"vw";
+  history.replaceState(null,"","#"+(i+1));
+}
+document.addEventListener("keydown",e=>{
+  if(["ArrowRight","PageDown"," "].includes(e.key)){e.preventDefault();show(i+1)}
+  if(["ArrowLeft","PageUp"].includes(e.key)){e.preventDefault();show(i-1)}
+  if(e.key==="Home")show(0);
+  if(e.key==="End")show(slides.length-1);
+});
+document.getElementById("prev").onclick=()=>show(i-1);
+document.getElementById("next").onclick=()=>show(i+1);
+let sx=null;
+document.addEventListener("touchstart",e=>{sx=e.touches[0].clientX});
+document.addEventListener("touchend",e=>{if(sx===null)return;const d=e.changedTouches[0].clientX-sx;if(Math.abs(d)>50)show(i+(d<0?1:-1));sx=null});
+show((parseInt(location.hash.slice(1))||1)-1);
+</script>
+</body>
+</html>
