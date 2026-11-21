@@ -47,7 +47,7 @@ h2{
   background:linear-gradient(transparent 58%,var(--hl-y) 58%,var(--hl-y) 92%,transparent 92%);
   padding:0 .2em;
 }
-.stage{font-family:"Caveat",cursive;color:var(--red);font-size:clamp(20px,2vw,28px);transform:rotate(-2deg);margin-bottom:.6vh;align-self:flex-start}
+.stage{font-family:"Caveat",cursive;color:var(--red);font-size:clamp(20px,2vw,28px);margin-bottom:.6vh;align-self:flex-start}
 .body{display:flex;gap:3vw;flex:1;align-items:flex-start}
 .col{flex:1;min-width:0}
 ul.pts{list-style:none;display:flex;flex-direction:column;gap:2.2vh}
@@ -82,7 +82,7 @@ svg.draw .hand{fill:none;stroke:var(--ink);stroke-width:2.2;stroke-linecap:round
 .cover{justify-content:center;align-items:flex-start;gap:2.5vh}
 .cover .sub{font-size:clamp(22px,2.6vw,36px);color:var(--pen)}
 .cover .who{margin-top:3vh;font-size:clamp(18px,1.9vw,26px);line-height:1.7}
-.cover .note{font-family:"Caveat",cursive;color:var(--red);font-size:clamp(20px,2vw,28px);transform:rotate(-1.5deg)}
+.cover .note{font-family:"Caveat",cursive;color:var(--red);font-size:clamp(20px,2vw,28px)}
 .road{display:flex;gap:1.6vw;flex-wrap:wrap;align-items:center;margin-top:4vh}
 .road .step{font-size:clamp(20px,2.3vw,32px);padding:2vh 1.5vw}
 .road .arr{font-size:clamp(24px,3vw,40px);color:var(--red)}
@@ -350,7 +350,7 @@ function show(n){
   slides.forEach((s,k)=>s.classList.toggle("active",k===i));
   document.getElementById("count").textContent=(i+1)+" / "+slides.length;
   document.getElementById("bar").style.width=((i+1)/slides.length*95)+"vw";
-  history.replaceState(null,"","#"+(i+1));
+  try{history.replaceState(null,"","#"+(i+1))}catch(e){}
 }
 document.addEventListener("keydown",e=>{
   if(["ArrowRight","PageDown"," "].includes(e.key)){e.preventDefault();show(i+1)}
